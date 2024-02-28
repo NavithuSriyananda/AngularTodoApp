@@ -1,0 +1,13 @@
+#header {
+  text-align: center;
+}
+
+#todo_table {
+  display: flex;
+  justify-content: center;
+}
+
+#todo_list * {
+  margin-left: 10px;
+  margin-right: 10px;
+}

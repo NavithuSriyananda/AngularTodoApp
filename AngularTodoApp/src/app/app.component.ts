@@ -5,6 +5,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { PopupComponent, ViewTodoModel } from './popup/popup.component';
 
 @Component({
   selector: 'app-root',
@@ -16,11 +18,14 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
+    MatButtonModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit {
+  constructor(public dialog: MatDialog) {}
+
   title: string = 'AngularTodoApp';
   todoForm = new FormGroup({
     todo: new FormControl(''),
@@ -32,10 +37,25 @@ export class AppComponent implements OnInit {
   }
 
   AddTodo() {
-    this.todoList.push(this.todoForm.value.todo ?? '');
+    if (this.todoForm.value.todo) {
+      this.todoList.push(this.todoForm.value.todo ?? '');
+      this.todoForm.reset();
+    }
   }
 
   RemoveTodo(index: number) {
     this.todoList.splice(index, 1);
+  }
+
+  ViewTodo(index: number) {
+    let todo: ViewTodoModel = {
+      index: index + 1,
+      todo: this.todoList.at(index) ?? '',
+    };
+
+    this.dialog.open(PopupComponent, {
+      data: todo,
+      hasBackdrop: true,
+    });
   }
 }
